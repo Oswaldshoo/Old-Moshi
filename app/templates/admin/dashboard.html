@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block nav_items %}
+<li class="nav-item"><a class="nav-link" href="#">Subjects</a></li>
+<li class="nav-item"><a class="nav-link" href="#">Classes</a></li>
+<li class="nav-item"><a class="nav-link" href="#">Teachers</a></li>
+<li class="nav-item"><a class="nav-link" href="#">Students</a></li>
+{% endblock %}
+
+{% block content %}
+<body class="admin-dashboard">
+<h1>Admin Dashboard</h1>
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Subjects</h5>
+                <p class="card-text">Manage school subjects</p>
+                <a href="#" class="btn btn-primary">Manage Subjects</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Classes</h5>
+                <p class="card-text">Manage school classes and streams</p>
+                <a href="#" class="btn btn-primary">Manage Classes</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Teachers</h5>
+                <p class="card-text">Manage teachers and assignments</p>
+                <a href="#" class="btn btn-primary">Manage Teachers</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Students</h5>
+                <p class="card-text">Manage student records</p>
+                <a href="#" class="btn btn-primary">Manage Students</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}

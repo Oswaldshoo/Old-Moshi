@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Academic Dashboard{% endblock %}
+
+{% block nav_items %}
+<li class="nav-item"><a class="nav-link" href="#">School Results</a></li>
+<li class="nav-item"><a class="nav-link" href="#">Send Results</a></li>
+<li class="nav-item"><a class="nav-link" href="#">Announcements</a></li>
+{% endblock %}
+
+{% block content %}
+<body class="academic-dashboard">
+<h1>Academic Dashboard</h1>
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">School Results</h5>
+                <p class="card-text">View and analyze full school results</p>
+                <a href="#" class="btn btn-primary">View Results</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Send Results</h5>
+                <p class="card-text">Send results to parents</p>
+                <a href="#" class="btn btn-primary">Send Results</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Announcements</h5>
+                <p class="card-text">Send announcements to parents</p>
+                <a href="#" class="btn btn-primary">Create Announcement</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}

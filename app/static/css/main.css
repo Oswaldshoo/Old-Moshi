@@ -1,0 +1,60 @@
+/* static/css/main.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #007bff !important;
+}
+
+.card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,.1);
+}
+
+.card-title {
+    color: #007bff;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* Custom styles for specific pages */
+.admin-dashboard .card {
+    border-left: 4px solid #007bff;
+}
+
+.academic-dashboard .card {
+    border-left: 4px solid #28a745;
+}
+
+.teacher-dashboard .card {
+    border-left: 4px solid #ffc107;
+}
+
+.parent-dashboard .card {
+    border-left: 4px solid #17a2b8;
+}
