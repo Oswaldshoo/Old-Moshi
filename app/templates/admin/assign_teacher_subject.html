@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Assign Teacher to Subject{% endblock %}
+
+{% block content %}
+<h1>Assign Teacher to Subject</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="subjects" class="form-label">Subjects</label>
+        <select id="subjects" name="subjects" class="form-select" multiple required>
+            {% for subject in subjects %}
+            <option value="{{ subject }}" {% if subject in teacher.subjects %}selected{% endif %}>{{ subject }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Assign Subjects</button>
+</form>
+
+<a href="{{ url_for('admin.teacher_dashboard', teacher_id=teacher_id) }}" class="btn btn-secondary mt-3">Back to Profile</a>
+{% endblock %}

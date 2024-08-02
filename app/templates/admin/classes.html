@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Classes{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Manage Classes</h1>
+
+<div class="row">
+    {% for class_name, streams in class_data.items() %}
+    <div class="col-md-3 mb-4">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">{{ class_name }}</h5>
+                <button class="btn btn-primary btn-sm float-end" onclick="showAddStreamModal('{{ class_name }}')">Add Stream</button>
+            </div>
+        </div>
+        {% for stream in streams %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <h6 class="card-title">{{ class_name }} Stream ({{ stream }})</h6>
+                <a href="{{ url_for('admin.stream', class_name=class_name, stream_name=stream) }}" class="btn btn-secondary btn-sm">View Stream</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal for adding streams -->
+<div class="modal fade" id="addStreamModal" tabindex="-1" aria-labelledby="addStreamModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addStreamModalLabel">Add Stream</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{{ url_for('admin.add_stream') }}">
+                <div class="modal-body">
+                    <input type="hidden" id="class_name" name="class_name">
+                    <div class="mb-3">
+                        <label for="stream_name" class="form-label">Stream Name</label>
+                        <input type="text" class="form-control" id="stream_name" name="stream_name" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Stream</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showAddStreamModal(className) {
+        document.getElementById('class_name').value = className;
+        var addStreamModal = new bootstrap.Modal(document.getElementById('addStreamModal'));
+        addStreamModal.show();
+    }
+</script>
+{% endblock %}

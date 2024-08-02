@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Subjects{% endblock %}
+
+{% block content %}
+<h1>Manage Subjects</h1>
+
+<div class="d-flex justify-content-between mb-3">
+    <div>
+        <select id="classFilter" class="form-select" onchange="filterSubjects()">
+            <option value="All">All Classes</option>
+            {% for class_name in class_data.keys() %}
+            <option value="{{ class_name }}">{{ class_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="btn btn-primary" onclick="showAddSubjectModal()">
+         Add Subject <i class="bi bi-journal-plus"></i>
+    </button>
+</div>
+
+<div class="row" id="subjectList">
+    {% for subject in subjects %}
+    <div class="col-md-4 mb-4 subject-card" data-class="{{ subject['class'] }}">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"> <span class="subject-number">{{ loop.index }}</span>. {{ subject['name'] }}</h5>
+                <p class="card-text">Code: {{ subject['code'] }}</p>
+                <p class="card-text">Class: {{ subject['class'] }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal for adding subjects -->
+<div class="modal fade" id="addSubjectModal" tabindex="-1" aria-labelledby="addSubjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addSubjectModalLabel">Add Subject</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{{ url_for('admin.add_subject') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="subject_name" class="form-label">Subject Name</label>
+                        <input type="text" class="form-control" id="subject_name" name="subject_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject_code" class="form-label">Subject Code</label>
+                        <input type="text" class="form-control" id="subject_code" name="subject_code" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject_class" class="form-label">Class</label>
+                        <select class="form-select" id="subject_class" name="subject_class" required>
+                            {% for class_name in class_data.keys() %}
+                            <option value="{{ class_name }}">{{ class_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Subject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showAddSubjectModal() {
+        var addSubjectModal = new bootstrap.Modal(document.getElementById('addSubjectModal'));
+        addSubjectModal.show();
+    }
+
+    function filterSubjects() {
+        var filterValue = document.getElementById('classFilter').value;
+        var subjectCards = document.querySelectorAll('.subject-card');
+        var counter = 1;  // Initialize counter
+
+        subjectCards.forEach(card => {
+            if (filterValue === 'All' || card.getAttribute('data-class') === filterValue) {
+                card.style.display = '';
+                card.querySelector('.subject-number').textContent = counter++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Teachers{% endblock %}
+
+{% block content %}
+<h1>Manage Teachers</h1>
+
+<div class="d-flex justify-content-between mb-3">
+    <div>
+        <select id="classFilter" class="form-select" onchange="filterTeachers()">
+            <option value="All">All Classes</option>
+            {% for class_name in classes %}
+            <option value="{{ class_name }}">{{ class_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="ms-3">
+        <select id="subjectFilter" class="form-select" onchange="filterTeachers()">
+            <option value="All">All Subjects</option>
+            {% for subject in subjects %}
+            <option value="{{ subject }}">{{ subject }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button class="btn btn-primary ms-3" onclick="showAddTeacherModal()">
+        Add Teacher <i class="bi bi-person-plus"></i>
+    </button>
+</div>
+
+<div class="row" id="teacherList">
+    {% for teacher in teachers %}
+    <div class="col-md-4 mb-4 teacher-card" data-class="{{ teacher.classes | join(', ') }}" data-subject="{{ teacher.subjects | join(', ') }}">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ loop.index }}. {{ teacher.name }}</h5>
+                <p class="card-text">Email: {{ teacher.email }}</p>
+                <p class="card-text">Phone: {{ teacher.phone }}</p>
+                <p class="card-text">Subjects: {{ teacher.subjects | join(', ') }}</p>
+                <p class="card-text">Classes: {{ teacher.classes | join(', ') }}</p>
+                <a href="{{ url_for('admin.teacher_dashboard', teacher_id=teacher['id']) }}" class="btn btn-info">View Profile</a>
+                <form action="{{ url_for('admin.delete_teacher', teacher_id=teacher['id']) }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Modal for adding teachers -->
+<div class="modal fade" id="addTeacherModal" tabindex="-1" aria-labelledby="addTeacherModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTeacherModalLabel">Add Teacher</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" action="{{ url_for('admin.add_teacher') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="teacher_name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="teacher_name" name="teacher_name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="teacher_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="teacher_email" name="teacher_email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="teacher_phone" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="teacher_phone" name="teacher_phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="teacher_subjects" class="form-label">Subjects</label>
+                        <select class="form-select" id="teacher_subjects" name="teacher_subjects" multiple>
+                            {% for subject in subjects %}
+                            <option value="{{ subject }}">{{ subject }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="teacher_classes" class="form-label">Classes</label>
+                        <select class="form-select" id="teacher_classes" name="teacher_classes" multiple required>
+                            {% for class_name in classes %}
+                            <option value="{{ class_name }}">{{ class_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Teacher</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showAddTeacherModal() {
+        var addTeacherModal = new bootstrap.Modal(document.getElementById('addTeacherModal'));
+        addTeacherModal.show();
+    }
+
+    function filterTeachers() {
+        var classFilterValue = document.getElementById('classFilter').value;
+        var subjectFilterValue = document.getElementById('subjectFilter').value;
+        var teacherCards = document.querySelectorAll('.teacher-card');
+        
+        let counter = 1; // Initialize counter
+        
+        teacherCards.forEach(card => {
+            var cardClass = card.getAttribute('data-class');
+            var cardSubject = card.getAttribute('data-subject');
+            
+            var classMatch = classFilterValue === 'All' || cardClass.includes(classFilterValue);
+            var subjectMatch = subjectFilterValue === 'All' || cardSubject.includes(subjectFilterValue);
+            
+            if (classMatch && subjectMatch) {
+                card.style.display = '';
+                card.querySelector('.card-title').textContent = counter++ + ". " + card.querySelector('.card-title').textContent.split('. ')[1];
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    function showClassInput() {
+        var subject = document.getElementById('teacher_subject').value;
+        var civicsClassInput = document.getElementById('civicsClassInput');
+        civicsClassInput.style.display = subject === 'Civics' ? '' : 'none';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Assign Teacher to Class{% endblock %}
+
+{% block content %}
+<h1>Assign Teacher to Class</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="classes" class="form-label">Classes</label>
+        <select id="classes" name="classes" class="form-select" multiple required>
+            {% for class_name in classes %}
+            <option value="{{ class_name }}" {% if class_name in teacher.classes %}selected{% endif %}>{{ class_name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Assign Classes</button>
+</form>
+
+<a href="{{ url_for('admin.teacher_dashboard', teacher_id=teacher_id) }}" class="btn btn-secondary mt-3">Back to Profile</a>
+{% endblock %}

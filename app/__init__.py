@@ -9,7 +9,7 @@ def create_app(config_class=Config):
 
     # Initialize Supabase client (placeholder)
     #supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    supabase: Client = create_client(app.config['SUPABASE_URL'], app.config['SUPABASE_KEY'])
+    #supabase: Client = create_client(app.config['SUPABASE_URL'], app.config['SUPABASE_KEY'])
 
     # Register blueprints
     app.register_blueprint(admin.bp)

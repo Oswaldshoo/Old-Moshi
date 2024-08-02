@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Profile{% endblock %}
+
+{% block content %}
+<h1>Teacher Profile</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>{{ teacher.name }}</h2>
+        <p>Email: {{ teacher.email }}</p>
+        <p>Phone: {{ teacher.phone }}</p>
+        
+        <!-- Display Subjects -->
+        <p>Subjects: 
+            {% if teacher.subjects %}
+                {{ teacher.subjects | join(', ') }}
+            {% else %}
+                No subjects assigned
+            {% endif %}
+        </p>
+        
+        <!-- Display Classes -->
+        <p>Classes: 
+            {% if teacher.classes %}
+                {{ teacher.classes | join(', ') }}
+            {% else %}
+                No classes assigned
+            {% endif %}
+        </p>
+    </div>
+    <div class="col-md-4 d-flex justify-content-center align-items-center">
+        <img src="{{ url_for('static', filename='images/oswald.jpg') }}" alt="Teacher Image" class="img-fluid rounded-circle" style="max-width: 150px; height: auto;">
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{{ url_for('admin.assign_teacher_subject', teacher_id=teacher.id) }}" class="btn btn-primary">Assign to Other Subjects</a>
+    <a href="{{ url_for('admin.assign_teacher_class', teacher_id=teacher.id) }}" class="btn btn-secondary">Assign to Classes</a>
+    <form method="post" action="{{ url_for('admin.delete_teacher', teacher_id=teacher.id) }}" style="display: inline;">
+        <button type="submit" class="btn btn-danger">Delete Teacher</button>
+    </form>
+</div>
+
+<a href="{{ url_for('admin.manage_teachers') }}" class="btn btn-secondary mt-3">Back to Teachers List</a>
+{% endblock %}
