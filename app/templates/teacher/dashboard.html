@@ -1,44 +1,42 @@
 {% extends "base.html" %}
-
 {% block title %}Teacher Dashboard{% endblock %}
-
 {% block nav_items %}
-<li class="nav-item"><a class="nav-link" href="#">My Classes</a></li>
-<li class="nav-item"><a class="nav-link" href="#">Upload Results</a></li>
-<li class="nav-item"><a class="nav-link" href="#">View Students</a></li>
+<a href="{{ url_for('teacher.view_classes') }}" class="nav-link">My Classes</a>
+<a href="{{ url_for('teacher.upload_results') }}" class="nav-link">Upload Results</a>
+<a href="{{ url_for('teacher.view_students') }}" class="nav-link">View Students</a>
 {% endblock %}
-
 {% block content %}
-<body class="teacher-dashboard">
 <h1>Teacher Dashboard</h1>
+
 <div class="row">
     <div class="col-md-4 mb-4">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">My Classes</h5>
                 <p class="card-text">View and manage your assigned classes</p>
-                <a href="#" class="btn btn-primary">View Classes</a>
+                <a href="{{ url_for('teacher.view_classes') }}" class="btn btn-primary">View Classes</a>
             </div>
         </div>
     </div>
+
     <div class="col-md-4 mb-4">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Upload Results</h5>
                 <p class="card-text">Upload results for your subjects</p>
-                <a href="#" class="btn btn-primary">Upload Results</a>
+                <a href="{{ url_for('teacher.upload_results') }}" class="btn btn-primary">Upload Results</a>
             </div>
         </div>
     </div>
+
     <div class="col-md-4 mb-4">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">View Students</h5>
                 <p class="card-text">View students in your classes</p>
-                <a href="#" class="btn btn-primary">View Students</a>
+                <a href="{{ url_for('teacher.view_students') }}" class="btn btn-primary">View Students</a>
             </div>
         </div>
     </div>
 </div>
-</body>
 {% endblock %}

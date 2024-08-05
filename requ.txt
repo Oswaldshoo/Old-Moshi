@@ -1,0 +1,67 @@
+Project Overview
+
+Web application to automate and digitalize secondary school activities
+Connect parents with their students' school activities
+
+User Roles
+
+School Administrator
+Parents
+Academic Staff
+Teachers
+
+Functionality by User Role
+1. School Administrator
+
+Add and remove subjects
+Add classes and streams
+Assign subjects by class (e.g., Math for Form One)
+Add teachers
+Assign teachers to classes and subjects
+Add students (individually and in bulk)
+Assign students to classes
+Remove subjects and teachers
+
+2. Parents
+
+Receive results via SMS
+View results in the system
+Receive announcements
+
+3. Academic Staff
+
+View full school results
+Send results to parents
+Send announcements to parents
+
+4. Teachers
+
+View results for their assigned class
+Upload results for their subject
+View their students
+
+General Requirements
+
+System is for Old Moshi Secondary School
+Three types of results: mid-term, annual, and test
+Parents log in using phone number and OTP
+Capture parent's phone number when registering a student (no separate parent table in DB)
+Dashboard section for all users except parents
+Automatic yearly progression of students from one class to the next
+Classes: Form One to Form Four
+
+Technical Stack
+
+Frontend: HTML, CSS, JavaScript, Bootstrap
+Backend: Python (Flask)
+Database: Supabase
+SMS Service: AfricasTalking
+
+Additional Notes
+
+Ensure proper authentication and authorization for different user roles
+Implement secure handling of student and parent data
+Design responsive UI for various devices (desktop and mobile)
+Plan for scalability as the number of students and data grows
+Consider implementing data backup and recovery processes
+Ensure compliance with relevant education and data protection regulations

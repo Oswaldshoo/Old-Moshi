@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Classes{% endblock %}
+{% block nav_items %}
+<a href="{{ url_for('teacher.view_classes') }}" class="nav-link">My Classes</a>
+<a href="{{ url_for('teacher.upload_results') }}" class="nav-link">Upload Results</a>
+<a href="{{ url_for('teacher.view_students') }}" class="nav-link">View Students</a>
+{% endblock %}
+{% block content %}
+<div class="container"></div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="text-center">Upload Results</h1>
+            <form method="post">
+                <div class="form-group">
+                    <label for="class_id">Class:</label>
+                    <select class="form-control" name="class_id" id="class_id">
+                        {% for class in classes %}
+                        <option value="{{ class.id }}">{{ class.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject_id">Subject:</label>
+                    <select class="form-control" name="subject_id" id="subject_id">
+                        {% for subject in subjects %}
+                        <option value="{{ subject.id }}">{{ subject.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="exam_type">Exam Type:</label>
+                    <input type="text" class="form-control" name="exam_type" id="exam_type">
+                </div>
+
+                <div class="form-group">
+                    <label for="results">Results:</label>
+                    <input type="file" class="form-control-file" name="results" id="results">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
+    </div>
+</div>
+<a href="{{ url_for('teacher.dashboard') }}">Back to Dashboard</a>
+{% endblock %}

@@ -1,61 +1,66 @@
 {% extends "base.html" %}
-
 {% block title %}Manage Teachers{% endblock %}
-
 {% block content %}
+
 <h1>Manage Teachers</h1>
 
 <div class="d-flex justify-content-between mb-3">
     <div>
-        <select id="classFilter" class="form-select" onchange="filterTeachers()">
-            <option value="All">All Classes</option>
-            {% for class_name in classes %}
-            <option value="{{ class_name }}">{{ class_name }}</option>
+        <select id="classFilter" class="form-select">
+            <option value="">All Classes</option>
+            {% for class_item in classes %}
+                <option value="{{ class_item.name }}">{{ class_item.name }}</option>
             {% endfor %}
         </select>
     </div>
     <div class="ms-3">
-        <select id="subjectFilter" class="form-select" onchange="filterTeachers()">
-            <option value="All">All Subjects</option>
+        <select id="subjectFilter" class="form-select">
+            <option value="">All Subjects</option>
             {% for subject in subjects %}
-            <option value="{{ subject }}">{{ subject }}</option>
+                <option value="{{ subject.name }}">{{ subject.name }}</option>
             {% endfor %}
         </select>
     </div>
-    <button class="btn btn-primary ms-3" onclick="showAddTeacherModal()">
-        Add Teacher <i class="bi bi-person-plus"></i>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTeacherModal">
+        Add Teacher <i class="bi bi-plus-circle"></i> 
     </button>
 </div>
 
-<div class="row" id="teacherList">
+<div id="teacherList" class="row">
     {% for teacher in teachers %}
-    <div class="col-md-4 mb-4 teacher-card" data-class="{{ teacher.classes | join(', ') }}" data-subject="{{ teacher.subjects | join(', ') }}">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ loop.index }}. {{ teacher.name }}</h5>
-                <p class="card-text">Email: {{ teacher.email }}</p>
-                <p class="card-text">Phone: {{ teacher.phone }}</p>
-                <p class="card-text">Subjects: {{ teacher.subjects | join(', ') }}</p>
-                <p class="card-text">Classes: {{ teacher.classes | join(', ') }}</p>
-                <a href="{{ url_for('admin.teacher_dashboard', teacher_id=teacher['id']) }}" class="btn btn-info">View Profile</a>
-                <form action="{{ url_for('admin.delete_teacher', teacher_id=teacher['id']) }}" method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
+        <div class="col-md-4 mb-4 teacher-card" data-class="{{ teacher.classes | join(', ') }}" data-subject="{{ teacher.subjects | join(', ') }}">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ loop.index }}. {{ teacher.name }}</h5>
+                    <p>Email: {{ teacher.email }}</p>
+                    <p>Phone: {{ teacher.phone }}</p>
+                    <p>Subjects: {{ teacher.subjects | join(', ') }}</p>
+                    <p>Classes and Streams: 
+                        {% for class_stream in teacher.class_streams %}
+                            {{ class_stream }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    </p>
+                    <a href="{{ url_for('admin.teacher_profile', teacher_id=teacher.id) }}" class="btn btn-info">View Profile</a>
+                    <form action="{{ url_for('admin.delete_teacher', teacher_id=teacher.id) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-danger" >Delete</button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
     {% endfor %}
 </div>
 
-<!-- Modal for adding teachers -->
+<!-- Add Teacher Modal -->
 <div class="modal fade" id="addTeacherModal" tabindex="-1" aria-labelledby="addTeacherModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addTeacherModalLabel">Add Teacher</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTeacherModal">
+                    Add Teacher
+                </button>
             </div>
-            <form method="post" action="{{ url_for('admin.add_teacher') }}">
+            <form action="{{ url_for('admin.add_teacher') }}" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="teacher_name" class="form-label">Name</label>
@@ -67,22 +72,29 @@
                     </div>
                     <div class="mb-3">
                         <label for="teacher_phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="teacher_phone" name="teacher_phone" required>
+                        <input type="tel" class="form-control" id="teacher_phone" name="teacher_phone" required>
                     </div>
                     <div class="mb-3">
                         <label for="teacher_subjects" class="form-label">Subjects</label>
-                        <select class="form-select" id="teacher_subjects" name="teacher_subjects" multiple>
+                        <select multiple class="form-select" id="teacher_subjects" name="teacher_subjects" required>
                             {% for subject in subjects %}
-                            <option value="{{ subject }}">{{ subject }}</option>
+                                <option value="{{ subject.id }}">{{ subject.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="mb-3">
                         <label for="teacher_classes" class="form-label">Classes</label>
-                        <select class="form-select" id="teacher_classes" name="teacher_classes" multiple required>
-                            {% for class_name in classes %}
-                            <option value="{{ class_name }}">{{ class_name }}</option>
+                        <select class="form-select" id="teacher_classes" name="teacher_classes" required>
+                            <option value="">Select a class</option>
+                            {% for class_item in classes %}
+                                <option value="{{ class_item.id }}">{{ class_item.name }}</option>
                             {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="teacher_streams" class="form-label">Streams</label>
+                        <select multiple class="form-select" id="teacher_streams" name="teacher_streams" required disabled>
+                            <!-- Options will be populated dynamically based on the selected class -->
                         </select>
                     </div>
                 </div>
@@ -95,39 +107,56 @@
     </div>
 </div>
 
+
 <script>
-    function showAddTeacherModal() {
-        var addTeacherModal = new bootstrap.Modal(document.getElementById('addTeacherModal'));
-        addTeacherModal.show();
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    const classFilter = document.getElementById('classFilter');
+    const subjectFilter = document.getElementById('subjectFilter');
+    const teacherCards = document.querySelectorAll('.teacher-card');
 
     function filterTeachers() {
-        var classFilterValue = document.getElementById('classFilter').value;
-        var subjectFilterValue = document.getElementById('subjectFilter').value;
-        var teacherCards = document.querySelectorAll('.teacher-card');
-        
-        let counter = 1; // Initialize counter
-        
+        const selectedClass = classFilter.value.toLowerCase();
+        const selectedSubject = subjectFilter.value.toLowerCase();
+
         teacherCards.forEach(card => {
-            var cardClass = card.getAttribute('data-class');
-            var cardSubject = card.getAttribute('data-subject');
-            
-            var classMatch = classFilterValue === 'All' || cardClass.includes(classFilterValue);
-            var subjectMatch = subjectFilterValue === 'All' || cardSubject.includes(subjectFilterValue);
-            
-            if (classMatch && subjectMatch) {
-                card.style.display = '';
-                card.querySelector('.card-title').textContent = counter++ + ". " + card.querySelector('.card-title').textContent.split('. ')[1];
-            } else {
-                card.style.display = 'none';
-            }
+            const cardClasses = card.dataset.class.toLowerCase();
+            const cardSubjects = card.dataset.subject.toLowerCase();
+            const showCard = (selectedClass === '' || cardClasses.includes(selectedClass)) &&
+                             (selectedSubject === '' || cardSubjects.includes(selectedSubject));
+            card.style.display = showCard ? '' : 'none';
         });
     }
 
-    function showClassInput() {
-        var subject = document.getElementById('teacher_subject').value;
-        var civicsClassInput = document.getElementById('civicsClassInput');
-        civicsClassInput.style.display = subject === 'Civics' ? '' : 'none';
-    }
+    classFilter.addEventListener('change', filterTeachers);
+    subjectFilter.addEventListener('change', filterTeachers);
+
+    const classSelect = document.getElementById('teacher_classes');
+    const streamSelect = document.getElementById('teacher_streams');
+
+    classSelect.addEventListener('change', function() {
+        const classId = this.value;
+        streamSelect.innerHTML = '';
+        streamSelect.disabled = true;
+
+        if (classId) {
+            fetch(`/admin/get-streams/${classId}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(stream => {
+                        const option = document.createElement('option');
+                        option.value = stream.id;
+                        option.textContent = stream.name;
+                        streamSelect.appendChild(option);
+                    });
+                    streamSelect.disabled = false;
+                });
+        }
+    });
+
+    // Initialize Bootstrap modals
+    var myModal = new bootstrap.Modal(document.getElementById('addTeacherModal'), {
+        keyboard: false
+    });
+});
 </script>
 {% endblock %}

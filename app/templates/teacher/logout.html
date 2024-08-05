@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Classes{% endblock %}
+{% block nav_items %}
+<a href="{{ url_for('teacher.view_classes') }}" class="nav-link">My Classes</a>
+<a href="{{ url_for('teacher.upload_results') }}" class="nav-link">Upload Results</a>
+<a href="{{ url_for('teacher.view_students') }}" class="nav-link">View Students</a>
+{% endblock %}
+{% block content %}
+
+<h1>Logged out successfully.</h1>
+<a href="{{ url_for('auth.login') }}">Login again</a>
+{% endblock %}

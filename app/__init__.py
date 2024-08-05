@@ -1,7 +1,7 @@
-from flask import Flask
+from flask import Flask, redirect, url_for
 from supabase import create_client, Client
 from .config import Config
-from .views import admin, academic, teacher, parent
+from .views import admin, academic, teacher, parent, auth
 
 def create_app(config_class=Config):
     app = Flask(__name__)
@@ -16,5 +16,10 @@ def create_app(config_class=Config):
     app.register_blueprint(academic.bp)
     app.register_blueprint(teacher.bp)
     app.register_blueprint(parent.bp)
+    app.register_blueprint(auth.bp)
+
+    @app.route('/')
+    def index():
+        return redirect(url_for('auth.login'))
 
     return app

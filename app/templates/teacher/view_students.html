@@ -1,0 +1,33 @@
+{% extends "baselog.html" %}
+{% block title %}Classes{% endblock %}
+{% block nav_items %}
+<a href="{{ url_for('teacher.view_classes') }}" class="nav-link">My Classes</a>
+<a href="{{ url_for('teacher.upload_results') }}" class="nav-link">Upload Results</a>
+<a href="{{ url_for('teacher.view_students') }}" class="nav-link">View Students</a>
+{% endblock %}
+{% block content %}
+    <h1>Students</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Gender</th>
+                <th>Class</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+                <tr>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.gender }}</td>
+                    <td>{{ student.classes.name }}</td>
+                    <td>
+                        <a href="{{ url_for('teacher.view_student', student_id=student.id) }}">View</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('teacher.dashboard') }}">Back to Dashboard</a>
+{% endblock %}

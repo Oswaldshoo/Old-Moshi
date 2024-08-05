@@ -1,39 +1,38 @@
 {% extends "base.html" %}
-
 {% block title %}Manage Subjects{% endblock %}
-
 {% block content %}
+
 <h1>Manage Subjects</h1>
 
 <div class="d-flex justify-content-between mb-3">
-    <div>
-        <select id="classFilter" class="form-select" onchange="filterSubjects()">
-            <option value="All">All Classes</option>
+    <div class="d-flex align-items-center">
+        <select id="classFilter" class="form-select ms-3" style="width: 200px;">
+            <option value="">All Classes</option>
             {% for class_name in class_data.keys() %}
-            <option value="{{ class_name }}">{{ class_name }}</option>
+                <option value="{{ class_name }}">{{ class_name }}</option>
             {% endfor %}
         </select>
     </div>
-    <button class="btn btn-primary" onclick="showAddSubjectModal()">
-         Add Subject <i class="bi bi-journal-plus"></i>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addSubjectModal">
+        Add Subject
     </button>
 </div>
 
-<div class="row" id="subjectList">
+<div id="subjectList" class="row">
     {% for subject in subjects %}
-    <div class="col-md-4 mb-4 subject-card" data-class="{{ subject['class'] }}">
+    <div class="col-md-4 mb-4 subject-card" data-class="{{ subject.class }}">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title"> <span class="subject-number">{{ loop.index }}</span>. {{ subject['name'] }}</h5>
-                <p class="card-text">Code: {{ subject['code'] }}</p>
-                <p class="card-text">Class: {{ subject['class'] }}</p>
+                <h5 class="card-title"><span class="subject-number">{{ loop.index }}</span>. {{ subject.name }}</h5>
+                <p>Code: {{ subject.code }}</p>
+                <p>Class: {{ subject.class }}</p>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
 
-<!-- Modal for adding subjects -->
+<!-- Add Subject Modal -->
 <div class="modal fade" id="addSubjectModal" tabindex="-1" aria-labelledby="addSubjectModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -41,7 +40,7 @@
                 <h5 class="modal-title" id="addSubjectModalLabel">Add Subject</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post" action="{{ url_for('admin.add_subject') }}">
+            <form action="{{ url_for('admin.add_subject') }}" method="POST">
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="subject_name" class="form-label">Subject Name</label>
@@ -54,8 +53,9 @@
                     <div class="mb-3">
                         <label for="subject_class" class="form-label">Class</label>
                         <select class="form-select" id="subject_class" name="subject_class" required>
+                            <option value="">Select a class</option>
                             {% for class_name in class_data.keys() %}
-                            <option value="{{ class_name }}">{{ class_name }}</option>
+                                <option value="{{ class_name }}">{{ class_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -70,24 +70,21 @@
 </div>
 
 <script>
-    function showAddSubjectModal() {
-        var addSubjectModal = new bootstrap.Modal(document.getElementById('addSubjectModal'));
-        addSubjectModal.show();
-    }
+document.getElementById('classFilter').addEventListener('change', function() {
+    var selectedClass = this.value;
+    var subjectCards = document.querySelectorAll('.subject-card');
+    var visibleIndex = 1;  // Initialize visible index to 1
 
-    function filterSubjects() {
-        var filterValue = document.getElementById('classFilter').value;
-        var subjectCards = document.querySelectorAll('.subject-card');
-        var counter = 1;  // Initialize counter
-
-        subjectCards.forEach(card => {
-            if (filterValue === 'All' || card.getAttribute('data-class') === filterValue) {
-                card.style.display = '';
-                card.querySelector('.subject-number').textContent = counter++;
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    }
+    subjectCards.forEach(function(card) {
+        if (selectedClass === '' || card.getAttribute('data-class') === selectedClass) {
+            card.style.display = 'block';
+            card.querySelector('.subject-number').textContent = visibleIndex + '.';  // Update the number
+            visibleIndex++;  // Increment the visible index
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
 </script>
+
 {% endblock %}
